@@ -6,3 +6,6 @@ SimultaneousControl Folder:
 
 Seeed-Grove-Sensor Folder:
   Contains Arduino code and LabVIEW vi to read CO2, temperature, and humidity from a single CO2 sensor.  Updates will be made to accomodate reading multiple sensors, and disable the autocalibration function.
+
+SerialCommunication Folder: 
+  Contains Arduino code and LabVIEW vi for basic serial communication between the two.  
