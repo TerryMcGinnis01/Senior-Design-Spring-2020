@@ -5,7 +5,9 @@ int incomingByte = 0; // for incoming serial data
 int waiting = 0; //open or closed communication
 int got = 0; //about to got a message
 //Positions of all are set equal to zero at start.
-int incoming[40] = {}; // Motor #1-8 positions, 5 digits to each motor
+int incoming[53] = {}; // Motor #1-10 positions, 5 digits to each motor, 51 52 AND 53 are for lights on/off
+int lights[3] = {2, 3, 4};
+int onoff[3] = {0, 0, 0};
 int motoPins[10]= {22, 25, 28, 31, 34, 37, 40, 43, 46, 49}; //Each Motor has 3 pins assigned to it.  EX. Pins 22,23,24 --> Step, Direction, Enable
 long poses[10]=   {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};  //Desired Positions of motors 1-10
 long o_poses[10]= {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};  //Current Positions of motors 1-10
@@ -16,7 +18,11 @@ byte i = 0;        //This is a global variable counter.  Somehow this takes up l
 
 void setup() {
   // Declare pins as output:
-  for (int j = 0; j < 13; j++) {
+  for (int q = 0; q < 3; q++) {
+    pinMode(q+2,OUTPUT);
+    digitalWrite(lights[q],HIGH);
+    }
+  for (int j = 22; j < 52; j++) {
     pinMode(j, OUTPUT);
     digitalWrite(motoPins[j] + 2, HIGH);
   }
@@ -29,7 +35,7 @@ void loop() {
 
 
   while (waiting == 0) {
-    //Arduino will read anything available, but not store anything yet.  It is waiting for LabVIEW to send a "beging storing" command
+    //Arduino will read anything available, but not store anything yet.  It is waiting for LabVIEW to send a "begin storing" command
     if (Serial.available() > 0) {
       got = Serial.read();
       if (got == 33) { //33 is the character ! . Arduino is waiting to receive this before storing any data received.
@@ -39,7 +45,7 @@ void loop() {
   }
 
 
-  while (bytes_read < 50) //We'll receive and store 50 characters.  This will move the specified motor to the specified position.  Then clear the stored characters and reset.
+  while (bytes_read < 53) //We'll receive and store 50 characters.  This will move the specified motor to the specified position.  Then clear the stored characters and reset.
   {
     if (Serial.available() > 0) {
       incomingByte = Serial.read() - 48;
@@ -52,7 +58,6 @@ void loop() {
 
   waiting = 0; //Sets up to wait for new data once the full loop finishes.
   bytes_read = 0; //Resets the counter for storing data, so it will go through that loop again once the full loop finishes.
-
 
   for (i = 0; i < 10; i++) {
     poses[i] = incoming[i * 5] * 10000L + incoming[i * 5 + 1] * 1000 + incoming[i * 5 + 2] * 100 + incoming[i * 5 + 3] * 10 + incoming[i * 5 + 4] * 1;
@@ -74,6 +79,16 @@ void loop() {
   maximum = max(maximum, minimum);   //
 
 
+  for (i = 0; i < 3; i++) {
+    onoff[i] = incoming[50+i];
+    if (onoff[i] == 1) {
+      digitalWrite(lights[i],LOW);
+    }
+    else {
+      digitalWrite(lights[i],HIGH);
+    }
+  }
+  
   for (long p = 0; p < maximum + 1; p++) { //This loop takes takes one step for each motor at the same time.  Motors that are powered off will not move.  Once a motor has reached its destination, arduino powers it off.
     for (i = 0; i < 10; i++) {
       if (compare[i] == 0) {
