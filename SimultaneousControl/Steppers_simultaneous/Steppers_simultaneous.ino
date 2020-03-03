@@ -68,10 +68,10 @@ void loop() {
     if (compare[i] != 0) {
       digitalWrite(motoPins[i] + 2, LOW); //If the motor needs to be moved, arduino powers it on.
       if (compare[i] < 0) {
-        digitalWrite(motoPins[i] + 1, HIGH); //arduino sets the direction the motor will turn
+        digitalWrite(motoPins[i] + 1, LOW); //arduino sets the direction the motor will turn
       }                                      //
       else {                                 //
-        digitalWrite(motoPins[i] + 1, LOW);  //
+        digitalWrite(motoPins[i] + 1, HIGH);  //
       }
     }
   }
@@ -88,7 +88,7 @@ void loop() {
       digitalWrite(lights[i],HIGH);
     }
   }
-  
+
   for (long p = 0; p < maximum + 1; p++) { //This loop takes takes one step for each motor at the same time.  Motors that are powered off will not move.  Once a motor has reached its destination, arduino powers it off.
     for (i = 0; i < 10; i++) {
       if (compare[i] == 0) {
