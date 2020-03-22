@@ -5,10 +5,10 @@ int incomingByte = 0; // for incoming serial data
 int waiting = 0; //open or closed communication
 int got = 0; //about to got a message
 //Positions of all are set equal to zero at start.
-int incoming[53] = {}; // Motor #1-10 positions, 5 digits to each motor, 51 52 AND 53 are for lights on/off
-int lights[3] = {2, 3, 4};
-int onoff[3] = {0, 0, 0};
-int motoPins[10]= {22, 25, 28, 31, 34, 37, 40, 43, 46, 49}; //Each Motor has 3 pins assigned to it.  EX. Pins 22,23,24 --> Step, Direction, Enable
+int incoming[54] = {}; // Motor #1-10 positions, 5 digits to each motor, 51 52 AND 53 are for relay on/off
+int relay[4] = {2, 3, 4, 5};
+int onoff[4] = {0, 0, 0 , 0};
+int motoPins[10]= {22, 23, 28, 29, 34, 35, 40, 41, 46, 47}; //Each Motor has 3 pins assigned to it.  EX. Pins 22,23,24 --> Step, Direction, Enable
 long poses[10]=   {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};  //Desired Positions of motors 1-10
 long o_poses[10]= {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};  //Current Positions of motors 1-10
 long compare[10]= {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};  //Displacement between Current and Desired Positions of motors 1-10
@@ -18,9 +18,9 @@ byte i = 0;        //This is a global variable counter.  Somehow this takes up l
 
 void setup() {
   // Declare pins as output:
-  for (int q = 0; q < 3; q++) {
+  for (int q = 0; q < 4; q++) {
     pinMode(q+2,OUTPUT);
-    digitalWrite(lights[q],HIGH);
+    digitalWrite(relay[q],HIGH);
     }
   for (int j = 22; j < 52; j++) {
     pinMode(j, OUTPUT);
@@ -66,12 +66,12 @@ void loop() {
     maximum = max(maximum, compare[i]);  //These two lines find the min and max steps between all motor displacements.
     minimum = min(minimum, compare[i]);  //
     if (compare[i] != 0) {
-      digitalWrite(motoPins[i] + 2, LOW); //If the motor needs to be moved, arduino powers it on.
+      digitalWrite(motoPins[i] + 4, LOW); //If the motor needs to be moved, arduino powers it on.
       if (compare[i] < 0) {
-        digitalWrite(motoPins[i] + 1, LOW); //arduino sets the direction the motor will turn
+        digitalWrite(motoPins[i] + 2, LOW); //arduino sets the direction the motor will turn
       }                                      //
       else {                                 //
-        digitalWrite(motoPins[i] + 1, HIGH);  //
+        digitalWrite(motoPins[i] + 2, HIGH);  //
       }
     }
   }
@@ -82,17 +82,17 @@ void loop() {
   for (i = 0; i < 3; i++) {
     onoff[i] = incoming[50+i];
     if (onoff[i] == 1) {
-      digitalWrite(lights[i],LOW);
+      digitalWrite(relay[i],LOW);
     }
     else {
-      digitalWrite(lights[i],HIGH);
+      digitalWrite(relay[i],HIGH);
     }
   }
 
   for (long p = 0; p < maximum + 1; p++) { //This loop takes takes one step for each motor at the same time.  Motors that are powered off will not move.  Once a motor has reached its destination, arduino powers it off.
     for (i = 0; i < 10; i++) {
       if (compare[i] == 0) {
-        digitalWrite(motoPins[i] + 2, HIGH); //If the motor is where it needs to be, power off.  Otherwise take a step.
+        digitalWrite(motoPins[i] + 4, HIGH); //If the motor is where it needs to be, power off.  Otherwise take a step.
       }
       if (compare[i] < 0) {
         digitalWrite(motoPins[i], HIGH);
