@@ -27,7 +27,7 @@ void setup() {
                 digitalWrite(motoPins[j] + 2, HIGH);
         }
         //Setup for Serial Communication
-        Serial.begin(9600); // opens serial port, sets data rate to 9600 bps
+        Serial.begin(115200); // opens serial port, sets data rate to 9600 bps
         delay(500);
 }
 void loop() {
@@ -79,7 +79,7 @@ void loop() {
         maximum = max(maximum, minimum); //
 
 
-        for (i = 0; i < 3; i++) {
+        for (i = 0; i < 4; i++) {
                 onoff[i] = incoming[50+i];
                 if (onoff[i] == 1) {
                         digitalWrite(relay[i],LOW);
