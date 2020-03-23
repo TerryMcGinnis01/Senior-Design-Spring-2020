@@ -6,8 +6,8 @@ int waiting = 0; //open or closed communication
 int got = 0; //about to got a message
 //Positions of all are set equal to zero at start.
 int incoming[54] = {}; // Motor #1-10 positions, 5 digits to each motor, 51 52 AND 53 are for relay on/off
-int relay[4] = {2, 3, 4, 5};
-int onoff[4] = {0, 0, 0, 0};
+int relay[4] = {2, 3, 4, 5}; //Pins for controlling each relay
+int onoff[4] = {0, 0, 0, 0}; //0 means off, 1 means on.  Refers to each relay
 int motoPins[10]= {22, 23, 28, 29, 34, 35, 40, 41, 46, 47}; //Each Motor has 3 pins assigned to it.  EX. Pins 22,23,24 --> Step, Direction, Enable
 long poses[10]=   {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};  //Desired Positions of motors 1-10
 long o_poses[10]= {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};  //Current Positions of motors 1-10
@@ -27,7 +27,7 @@ void setup() {
                 digitalWrite(motoPins[j] + 2, HIGH);
         }
         //Setup for Serial Communication
-        Serial.begin(115200); // opens serial port, sets data rate to 9600 bps
+        Serial.begin(115200); // opens serial port, sets data rate to 115200 bps
         delay(500);
 }
 void loop() {
@@ -101,7 +101,7 @@ void loop() {
                                 digitalWrite(motoPins[i], LOW);
                         }
                 }
-                delayMicroseconds(100);
+                delayMicroseconds(90);
 
                 for (i = 0; i < 10; i++) {
                         if (compare[i] < 0) {
@@ -113,7 +113,7 @@ void loop() {
                                 compare[i]--; //Remember that a step was taken
                         }
                 }
-                delayMicroseconds(100);
+                delayMicroseconds(90);
 
         }
         for (i = 0; i < 10; i++) {
