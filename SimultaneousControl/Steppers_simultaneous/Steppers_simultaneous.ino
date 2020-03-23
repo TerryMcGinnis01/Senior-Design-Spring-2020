@@ -19,7 +19,7 @@ byte i = 0;        //This is a global variable counter.  Somehow this takes up l
 void setup() {
         // Declare pins as output:
         for (int q = 0; q < 4; q++) {
-                pinMode(q+2,OUTPUT);
+                pinMode(relay[q],OUTPUT);
                 digitalWrite(relay[q],HIGH);
         }
         for (int j = 22; j < 52; j++) {
