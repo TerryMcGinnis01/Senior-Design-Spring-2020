@@ -15,12 +15,14 @@ Arduino and LabVIEW files designed to allow monitoring and controlling of temper
 - 10 4-Wire NEMA 17 Stepper Motors
 - 4 Relays
 
-### How the .vi Works:
+### How the vi Works:
 
 ![](.\Images\SimultaneousControl.png)
 LabVIEW checks the buffer for a "ready to receive" signal from Arduino.  When received, LabVIEW sends a confirmation "!" followed by a string about motor positions and on/off of lights and circulation fans.
 
-### Arduino code:
+### How the Arduino Code Works:
+
+
 
 ***
 
