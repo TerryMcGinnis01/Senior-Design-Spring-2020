@@ -20,6 +20,11 @@ Arduino and LabVIEW files designed to allow monitoring and controlling of temper
 ![](.\Images\SimultaneousControl.png)
 LabVIEW checks the buffer for a "ready to receive" signal from Arduino.  When received, LabVIEW sends a confirmation "!" followed by a string about motor positions and on/off of lights and circulation fans.
 
+The string sent breaks down as follows:
+- 5 digit integers for each motors
+- a single 0 or 1 for all circulation fans
+- a 0 or 1 for each light
+
 ### How the Arduino Code Works:
 
 
@@ -34,6 +39,7 @@ LabVIEW checks the buffer for a "ready to receive" signal from Arduino.  When re
 - 8-channel multiplexer
 - 6 Grove - CO2 & Temperature & Humidity Sensors for Arduino - SCD30 (https://www.seeedstudio.com/Grove-CO2-Temperature-Humidity-Sensor-SCD30-p-2911.html)
 
-### LabVIEW .vi:
+### How the vi Works:
+![](.\Images\co2Readings.png)
 
 ### Arduino code:
