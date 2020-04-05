@@ -1,6 +1,7 @@
 /*
+   Edited for personal use by: Zachery Nelson (04.05.2020)
    Reading CO2, humidity and temperature from the SCD30
-   By: Nathan Seidle
+   Original Creator: Nathan Seidle
    SparkFun Electronics
    Date: May 22nd, 2018
    License: MIT. See license file for more information but you can
