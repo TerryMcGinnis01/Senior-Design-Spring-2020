@@ -17,7 +17,7 @@ Arduino and LabVIEW files designed to allow monitoring and controlling of temper
 
 ### How the vi Works:
 
-![](.\Images\SimultaneousControl.png)
+![](/Images/SimultaneousControl.png)
 LabVIEW checks the buffer for a "ready to receive" signal from Arduino.  When received, LabVIEW sends a confirmation "!" followed by a string about motor positions and on/off of lights and circulation fans.
 
 The string sent breaks down as follows:
@@ -40,6 +40,7 @@ The string sent breaks down as follows:
 - 6 Grove - CO2 & Temperature & Humidity Sensors for Arduino - SCD30 (https://www.seeedstudio.com/Grove-CO2-Temperature-Humidity-Sensor-SCD30-p-2911.html)
 
 ### How the vi Works:
-![](.\Images\co2Readings.png)
+![](/Images/co2Readings.png)
+LabVIEW checks the buffer for incoming bytes.  The first 2 bytes received determines what measurement it is receiving (ex. t5 means temperature reading from sensor 5).  It displays each reading in a separate indicator.  The data is appended to a plain text file.
 
 ### Arduino code:
