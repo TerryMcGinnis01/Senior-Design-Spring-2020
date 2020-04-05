@@ -1,5 +1,6 @@
 /*
    Controls 10 stepper motor positions, and 4 relays.
+   START WITH ALL VALVES CLOSED!!!
    The angle/step is equal to 360/(number steps per revolution).
    Relay off --> 0
    Relay on --> 1
@@ -20,7 +21,7 @@ int bytesRead = 0; //characters that are stored from incoming data
 int incomingByte = 0; // for incoming serial data
 int got = 0; //about to got a message
 //Positions of all are set equal to zero at start.
-int incoming[54] = {}; // Motor #1-10 positions, 5 digits to each motor, 51 52 AND 53 are for relay on/off
+int incoming[54] = {}; // 1-50 are Motor #1-10 positions; 5 digits to each motor. 51-54 are for relay on/off
 int relay[4] = {2, 3, 4, 5}; //Pins for controlling each relay
 int onoff[4] = {0, 0, 0, 0}; //0 --> off, 1 --> on.
 int motoPin[10]= {22, 23, 28, 29, 34, 35, 40, 41, 46, 47}; //Each Motor has 3 pins assigned to it.  EX. Pins 22,23,24 --> Step, Direction, Enable
@@ -47,7 +48,6 @@ void setup() {
 }
 void loop() {
         Serial.println("o"); // sends a "ready to receive" byte
-
 
         while (0==0) {
                 //We'll read anything available until an "acknowledged" byte is sent from the other device.  Note no data is stored during this loop
@@ -93,7 +93,7 @@ void loop() {
         minimum = -1 * minimum;      //These two lines find the absolute max displacement for the motors.
         maximum = max(maximum, minimum); //
 
-
+        //Switch the relays on/off
         for (i = 0; i < 4; i++) {
                 onoff[i] = incoming[50+i];
                 if (onoff[i] == 1) {
@@ -103,6 +103,7 @@ void loop() {
                         digitalWrite(relay[i],HIGH);
                 }
         }
+
         //Put the motors where they need to go.  Each motor will take a step at the same time if it needs to.
         for (long p = 0; p < maximum + 1; p++) {
                 //If the motor is where it needs to be, power off.  Otherwise take a step.
@@ -117,6 +118,7 @@ void loop() {
                                 digitalWrite(motoPin[i], LOW);
                         }
                 }
+
                 delayMicroseconds(90);
 
                 for (i = 0; i < 10; i++) {
