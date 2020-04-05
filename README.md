@@ -1,11 +1,20 @@
-This repository contains Arduino and LabVIEW files related to UT Tyler's Mechanical Engineering Senior Design group for Spring 2020.
-This project is related to automating equipment for Demand Control Ventilation.
+#Documentation
+***
+Arduino and LabVIEW files designed to allow monitoring and controlling of temperature, CO2 levels, and airflow in a test bed through use of Arduino and DAQ.
+***
+##Simultaneous Motor Control:
+###Hardware:
+- Arduino Mega 2560 R3
+- 10 TB6600 Stepper Motor Drivers
+- 10 4-Wire NEMA 17 Stepper Motors
+###LabVIEW .vi:
+###Arduino code:
+***
 
-SimultaneousControl Folder:
-  Contains Arduino code and LabVIEW vi to control positions of stepper motors through serial communication.  A tb6600 motor driver is used with NEMA 17s.  The input is equal to the number of steps from the motor's starting position.
-
-Seeed-Grove-Sensor Folder:
-  Contains Arduino code and LabVIEW vi to read CO2, temperature, and humidity from a single CO2 sensor.  Updates will be made to accomodate reading multiple sensors, and disable the autocalibration function.
-
-SerialCommunication Folder: 
-  Contains Arduino code and LabVIEW vi for basic serial communication between the two.  
+##CO2, Temperature, and Humidity Sensing:
+###Hardware:
+- Arduino Uno
+- 8-channel multiplexer
+- 6 Grove - CO2 & Temperature & Humidity Sensors for Arduino - SCD30 (https://www.seeedstudio.com/Grove-CO2-Temperature-Humidity-Sensor-SCD30-p-2911.html)
+###LabVIEW .vi:
+###Arduino code:
