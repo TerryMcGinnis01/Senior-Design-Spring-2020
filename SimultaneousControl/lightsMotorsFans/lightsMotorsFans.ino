@@ -1,16 +1,31 @@
+/*
+   Controls 10 stepper motor positions, and 4 relays.
+   The angle/step is equal to 360/(number steps per revolution).
+   Relay off --> 0
+   Relay on --> 1
+
+   Flow:
+   Sends a "ready to receive data" byte.
+   Waits for "acknowledged" byte.
+   Received data and stores into array
+   Stores sliced array into variables for each motor and relay.
+   Turns on/off each relay.
+   Moves the motors to the specified positions.
+   Starts over
+ */
+
 // Define stepper motor connections:
 
-int bytes_read = 0; //characters that are stored from incoming data
+int bytesRead = 0; //characters that are stored from incoming data
 int incomingByte = 0; // for incoming serial data
-int waiting = 0; //open or closed communication
 int got = 0; //about to got a message
 //Positions of all are set equal to zero at start.
 int incoming[54] = {}; // Motor #1-10 positions, 5 digits to each motor, 51 52 AND 53 are for relay on/off
 int relay[4] = {2, 3, 4, 5}; //Pins for controlling each relay
-int onoff[4] = {0, 0, 0, 0}; //0 means off, 1 means on.  Refers to each relay
-int motoPins[10]= {22, 23, 28, 29, 34, 35, 40, 41, 46, 47}; //Each Motor has 3 pins assigned to it.  EX. Pins 22,23,24 --> Step, Direction, Enable
-long poses[10]=   {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};  //Desired Positions of motors 1-10
-long o_poses[10]= {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};  //Current Positions of motors 1-10
+int onoff[4] = {0, 0, 0, 0}; //0 --> off, 1 --> on.
+int motoPin[10]= {22, 23, 28, 29, 34, 35, 40, 41, 46, 47}; //Each Motor has 3 pins assigned to it.  EX. Pins 22,23,24 --> Step, Direction, Enable
+long newPosition[10]=   {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};  //Desired Positions of motors 1-10
+long originalPosition[10]= {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};  //Current Positions of motors 1-10
 long compare[10]= {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};  //Displacement between Current and Desired Positions of motors 1-10
 long maximum = 0;  //Used to measure maximum displacement (Minimum steps to take to get every motor where it needs to go)
 long minimum = 0;  //A helper to measure maximum displacement (if the absolute maximum value is a negative number)
@@ -24,54 +39,54 @@ void setup() {
         }
         for (int j = 22; j < 52; j++) {
                 pinMode(j, OUTPUT);
-                digitalWrite(motoPins[j] + 2, HIGH);
+                digitalWrite(motoPin[j] + 2, HIGH);
         }
         //Setup for Serial Communication
         Serial.begin(115200); // opens serial port, sets data rate to 115200 bps
         delay(500);
 }
 void loop() {
-        Serial.println("o"); //This character tells LabVIEW that arduino is ready for incoming data
+        Serial.println("o"); // sends a "ready to receive" byte
 
 
-        while (waiting == 0) {
-                //Arduino will read anything available, but not store anything yet.  It is waiting for LabVIEW to send a "begin storing" command
+        while (0==0) {
+                //We'll read anything available until an "acknowledged" byte is sent from the other device.  Note no data is stored during this loop
                 if (Serial.available() > 0) {
                         got = Serial.read();
-                        if (got == 33) { //33 is the character ! . Arduino is waiting to receive this before storing any data received.
-                                waiting = 1; //Arduino is no longer waiting, and kicks out of this loop.
+                        if (got == 33) { //33 is the "acknowledged" byte we're waiting for ('!' character)
+                                break;
                         }
                 }
         }
 
-
-        while (bytes_read < 54) //We'll receive and store 54 characters.  This will move the specified motor to the specified position.  Then clear the stored characters and reset.
+        while (bytesRead < 54) //We'll receive and store 54 characters.  This will move the specified motor to the specified position.  Then clear the stored characters and reset.
         {
                 if (Serial.available() > 0) {
                         incomingByte = Serial.read() - 48;
                         if (incomingByte >= 0 && incomingByte <= 9) {
-                                incoming[bytes_read] = incomingByte;
-                                bytes_read++;
+                                incoming[bytesRead] = incomingByte;
+                                bytesRead++;
                         }
                 }
         }
 
-        waiting = 0; //Sets up to wait for new data once the full loop finishes.
-        bytes_read = 0; //Resets the counter for storing data, so it will go through that loop again once the full loop finishes.
+        bytesRead = 0; //Resets the counter for storing data, so it will go through that loop again once the full loop finishes.
 
         for (i = 0; i < 10; i++) {
-                poses[i] = incoming[i * 5] * 10000L + incoming[i * 5 + 1] * 1000 + incoming[i * 5 + 2] * 100 + incoming[i * 5 + 3] * 10 + incoming[i * 5 + 4] * 1;
+                newPosition[i] = incoming[i * 5] * 10000L + incoming[i * 5 + 1] * 1000 + incoming[i * 5 + 2] * 100 + incoming[i * 5 + 3] * 10 + incoming[i * 5 + 4] * 1;
                 //1-5 stored characters get mushed into a 5 digit number and stored.  Then 6-10, 11-15, and so on until 36-40.  8 5-digit numbers total get stored to desired positions.
-                compare[i] = poses[i] - o_poses[i]; //Finds the displacement for each motor and stores it.
+                compare[i] = newPosition[i] - originalPosition[i]; //Finds the displacement for each motor and stores it.
                 maximum = max(maximum, compare[i]); //These two lines find the min and max steps between all motor displacements.
                 minimum = min(minimum, compare[i]); //
                 if (compare[i] != 0) {
-                        digitalWrite(motoPins[i] + 4, LOW); //If the motor needs to be moved, arduino powers it on.
+                        //If the motor needs to be moved, arduino powers it on.
+                        digitalWrite(motoPin[i] + 4, LOW);
+                        //arduino sets the direction the motor will turn
                         if (compare[i] < 0) {
-                                digitalWrite(motoPins[i] + 2, LOW); //arduino sets the direction the motor will turn
-                        }                    //
-                        else {               //
-                                digitalWrite(motoPins[i] + 2, HIGH); //
+                                digitalWrite(motoPin[i] + 2, LOW);
+                        }
+                        else {
+                                digitalWrite(motoPin[i] + 2, HIGH);
                         }
                 }
         }
@@ -88,39 +103,41 @@ void loop() {
                         digitalWrite(relay[i],HIGH);
                 }
         }
-
-        for (long p = 0; p < maximum + 1; p++) { //This loop takes takes one step for each motor at the same time.  Motors that are powered off will not move.  Once a motor has reached its destination, arduino powers it off.
+        //Put the motors where they need to go.  Each motor will take a step at the same time if it needs to.
+        for (long p = 0; p < maximum + 1; p++) {
+                //If the motor is where it needs to be, power off.  Otherwise take a step.
                 for (i = 0; i < 10; i++) {
                         if (compare[i] == 0) {
-                                digitalWrite(motoPins[i] + 4, HIGH); //If the motor is where it needs to be, power off.  Otherwise take a step.
+                                digitalWrite(motoPin[i] + 4, HIGH);
                         }
                         if (compare[i] < 0) {
-                                digitalWrite(motoPins[i], HIGH);
+                                digitalWrite(motoPin[i], HIGH);
                         }
                         else if (compare[i] > 0) {
-                                digitalWrite(motoPins[i], LOW);
+                                digitalWrite(motoPin[i], LOW);
                         }
                 }
                 delayMicroseconds(90);
 
                 for (i = 0; i < 10; i++) {
                         if (compare[i] < 0) {
-                                digitalWrite(motoPins[i], LOW);
+                                digitalWrite(motoPin[i], LOW);
                                 compare[i]++; //Remember that a step was taken
                         }
                         else {
-                                digitalWrite(motoPins[i], HIGH);
+                                digitalWrite(motoPin[i], HIGH);
                                 compare[i]--; //Remember that a step was taken
                         }
                 }
                 delayMicroseconds(90);
-
         }
+
         for (i = 0; i < 10; i++) {
-                o_poses[i] = poses[i]; //Now that all the motors have reached their destinations, set desired positions to current positions.
+                originalPosition[i] = newPosition[i];
         }
 
-        maximum = 0; //Reset the max displacement for the next loop
-        minimum = 0; //Reset the min displacement for the next loop
+        //Reset max & min
+        maximum = 0;
+        minimum = 0;
 
 }
