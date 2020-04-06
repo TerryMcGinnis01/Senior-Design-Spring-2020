@@ -42,6 +42,7 @@ The string sent from LabVIEW breaks down as follows:
 ### How the vi Works:
 
 ![](Images/co2Read.gif)
+
 LabVIEW checks the buffer for incoming bytes.  The first 2 bytes received determine the indicator it will be shown in.  It displays each reading in a separate indicator.  The data is appended to a plain text file.
 
 ### Example:
