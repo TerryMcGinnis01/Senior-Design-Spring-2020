@@ -17,7 +17,7 @@ Arduino and LabVIEW files designed to allow monitoring and controlling of temper
 
 ### How the vi Works:
 
-![](/Images/SimultaneousControl.png)
+![](Images/SimultaneousControl.png)
 LabVIEW checks the buffer for a "ready to receive" byte from Arduino.  When received, LabVIEW sends a string containing a confirmation byte, motor positions, and on/off for each relay.
 
 The string sent from LabVIEW breaks down as follows:
@@ -40,7 +40,7 @@ The string sent from LabVIEW breaks down as follows:
 
 ### How the vi Works:
 
-![](/Images/co2Read.gif)
+![](Images/co2Read.gif)
 LabVIEW checks the buffer for incoming bytes.  The first 2 bytes received determine the indicator it will be shown in.  It displays each reading in a separate indicator.  The data is appended to a plain text file.
 
 ### Example:
