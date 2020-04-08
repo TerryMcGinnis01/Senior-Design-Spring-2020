@@ -46,7 +46,7 @@ The string sent from LabVIEW breaks down as follows:
 LabVIEW checks the buffer for incoming bytes.  The first 2 bytes received determine the indicator it will be shown in.  It displays each reading in a separate indicator.  The data is appended to a plain text file.
 
 ### Example:
-If the Arduino sends "t521.3", LabVIEW interprets this as the temperature from sensor 5.  So 21.3 is displayed in the t5 indicator.
+If the Arduino sends "t521.3", LabVIEW interprets this as the temperature from sensor 5 (t5).  So 21.3 is displayed in the t5 indicator.
 
 ### How the Arduino Code Works:
 
