@@ -43,6 +43,13 @@ void setup()
                 while (1)
                         ;
         }
+        for (int i = 1; i<8; i++) {
+                tcaselect(i);
+                if (airSensor.dataAvailable())
+                {
+                        airSensor.setAutoSelfCalibration(false);
+                }
+        }
 
         //The SCD30 has data ready every two seconds
 }
