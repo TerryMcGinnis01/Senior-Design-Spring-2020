@@ -6,6 +6,29 @@ Arduino and LabVIEW files designed to allow monitoring and controlling of temper
 
 ***
 
+## The Plenum Fan:
+
+### Hardware:
+
+- 1 DAQ
+- 1 Variable speed fan (0-10 V input)
+
+### How the vi Works:
+
+![](images/simultaneousControl.png)
+
+LabVIEW checks the buffer for a "ready to receive" byte from Arduino.  When received, LabVIEW sends a string containing a confirmation byte, motor positions, and on/off for each relay.
+
+The string sent from LabVIEW breaks down as follows:
+- a confirmation "!" character.
+- 5 digit integers for each motor #1-10, with left padding of any needed 0's.
+- a single 0 or 1 for all circulation fans.
+- a 0 or 1 for each relay.
+
+### How the Arduino Code Works:
+
+***
+
 ## Motors, Lights, and Circulation Fans:
 
 ### Hardware:
@@ -17,7 +40,7 @@ Arduino and LabVIEW files designed to allow monitoring and controlling of temper
 
 ### How the vi Works:
 
-![](Images/SimultaneousControl.png)
+![](images/SimultaneousControl.png)
 
 LabVIEW checks the buffer for a "ready to receive" byte from Arduino.  When received, LabVIEW sends a string containing a confirmation byte, motor positions, and on/off for each relay.
 
@@ -40,15 +63,15 @@ The string sent from LabVIEW breaks down as follows:
 
 ### How the vi Works:
 
-![](Images/massFlowSensors.gif)
+![](images/massFlowSensors.gif)
 
 LabVIEW continuously reads 3 voltages from the airflow sensors.  Each voltage is passed through an equation to calculate the CFM.  The average of the most recent 5 CFM readings from each sensor are displayed.
 
-####The sub-vi:
+#### The sub-vi:
 
 averages 5 terms
 
-![](Images/avg5Terms_sub.png)
+![](images/avg5Terms_sub.png)
 
 ### How the Arduino Code Works:
 
@@ -64,7 +87,7 @@ averages 5 terms
 
 ### How the vi Works:
 
-![](Images/co2Read.gif)
+![](images/co2Read.gif)
 
 LabVIEW checks the buffer for incoming bytes.  The first 2 bytes received determine the indicator it will be shown in.  It displays each reading in a separate indicator.  The data is appended to a plain text file.
 
