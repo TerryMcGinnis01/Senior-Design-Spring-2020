@@ -40,7 +40,7 @@ The string sent from LabVIEW breaks down as follows:
 
 ### How the vi Works:
 
-![](Images/massFlowSensors.png)
+![](Images/massFlowSensors.gif)
 
 LabVIEW continuously reads 3 voltages from the airflow sensors.  Each voltage is passed through an equation to calculate the CFM.  The average of the most recent 5 CFM readings from each sensor are displayed.
 
