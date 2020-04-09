@@ -31,6 +31,23 @@ The string sent from LabVIEW breaks down as follows:
 
 ***
 
+## Volumetric Air Flow Sensing:
+
+### Hardware:
+
+- 1 DAQ
+- 3 airflow sensors
+
+### How the vi Works:
+
+![](Images/massFlowSensors.png)
+
+LabVIEW continuously reads 3 voltages from the airflow sensors.  Each voltage is passed through an equation to calculate the CFM.  The average of the most recent 5 CFM readings from each sensor are displayed.
+
+### How the Arduino Code Works:
+
+***
+
 ## CO2, Temperature, and Humidity Sensing:
 
 ### Hardware:
