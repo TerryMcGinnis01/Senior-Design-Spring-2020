@@ -44,6 +44,12 @@ The string sent from LabVIEW breaks down as follows:
 
 LabVIEW continuously reads 3 voltages from the airflow sensors.  Each voltage is passed through an equation to calculate the CFM.  The average of the most recent 5 CFM readings from each sensor are displayed.
 
+####The sub-vi:
+
+averages 5 terms
+
+![](Images/avg5Terms_sub.png)
+
 ### How the Arduino Code Works:
 
 ***
