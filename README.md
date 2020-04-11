@@ -15,7 +15,7 @@ Arduino and LabVIEW files designed to allow monitoring and controlling of temper
 
 ### How the vi Works:
 
-![](images/simultaneousControl.png)
+![](Images/simultaneousControl.png)
 
 LabVIEW checks the buffer for a "ready to receive" byte from Arduino.  When received, LabVIEW sends a string containing a confirmation byte, motor positions, and on/off for each relay.
 
@@ -40,7 +40,7 @@ The string sent from LabVIEW breaks down as follows:
 
 ### How the vi Works:
 
-![](images/SimultaneousControl.png)
+![](Images/SimultaneousControl.png)
 
 LabVIEW checks the buffer for a "ready to receive" byte from Arduino.  When received, LabVIEW sends a string containing a confirmation byte, motor positions, and on/off for each relay.
 
@@ -63,7 +63,7 @@ The string sent from LabVIEW breaks down as follows:
 
 ### How the vi Works:
 
-![](images/massFlowSensors.gif)
+![](Images/massFlowSensors.gif)
 
 LabVIEW continuously reads 3 voltages from the airflow sensors.  Each voltage is passed through an equation to calculate the CFM.  The average of the most recent 5 CFM readings from each sensor are displayed.
 
@@ -71,7 +71,7 @@ LabVIEW continuously reads 3 voltages from the airflow sensors.  Each voltage is
 
 averages 5 terms
 
-![](images/avg5Terms_sub.png)
+![](Images/avg5Terms_sub.png)
 
 ### How the Arduino Code Works:
 
@@ -87,7 +87,7 @@ averages 5 terms
 
 ### How the vi Works:
 
-![](images/co2Read.gif)
+![](Images/co2Read.gif)
 
 LabVIEW checks the buffer for incoming bytes.  The first 2 bytes received determine the indicator it will be shown in.  It displays each reading in a separate indicator.  The data is appended to a plain text file.
 
