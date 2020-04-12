@@ -15,17 +15,7 @@ Arduino and LabVIEW files designed to allow monitoring and controlling of temper
 
 ### How the vi Works:
 
-![](Images/simultaneousControl.png)
-
-LabVIEW checks the buffer for a "ready to receive" byte from Arduino.  When received, LabVIEW sends a string containing a confirmation byte, motor positions, and on/off for each relay.
-
-The string sent from LabVIEW breaks down as follows:
-- a confirmation "!" character.
-- 5 digit integers for each motor #1-10, with left padding of any needed 0's.
-- a single 0 or 1 for all circulation fans.
-- a 0 or 1 for each relay.
-
-### How the Arduino Code Works:
+Input a percent power, and the DAQ outputs that percent of 10 V to the variable speed fan.
 
 ***
 
@@ -73,8 +63,6 @@ averages 5 terms
 
 ![](Images/avg5Terms_sub.png)
 
-### How the Arduino Code Works:
-
 ***
 
 ## CO2, Temperature, and Humidity Sensing:
@@ -92,8 +80,9 @@ averages 5 terms
 LabVIEW checks the buffer for incoming bytes.  The first 2 bytes received determine the indicator it will be shown in.  It displays each reading in a separate indicator.  The data is appended to a plain text file.
 
 ### Example:
+
 If the Arduino sends "t521.3", LabVIEW interprets this as the temperature from sensor 5 (t5).  So 21.3 is displayed in the t5 indicator.
 
 ### How the Arduino Code Works:
 
-The Arduino code scans through the 8 channels of the multiplexer and if there is data available to read from the sensor, it will write to the buffer 2 bytes as an identifier followed by the data itself.
+The Arduino code scans through the 8 channels of the multiplexer and if there is data available to read from the sensor, it will read the data and write to the buffer 2 "identifier" bytes plus the data read.
