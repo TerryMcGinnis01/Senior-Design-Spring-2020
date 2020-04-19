@@ -60,6 +60,8 @@ The string sent from LabVIEW breaks down as follows:
 
 ### How the Arduino Code Works:
 
+Arduino communicates to LabVIEW via serial protocol.  It sends a signal if it is ready to receive information, and waits until LabVIEW sends and acknowledged signal, followed by information about lights, circulation fans & stepper position for each motor. Arduino stores that information, closes communication and moves everything to the right place.  It sends an open signal once it is finished, and the process repeats.
+
 ***
 
 ## Volumetric Air Flow Sensing:
