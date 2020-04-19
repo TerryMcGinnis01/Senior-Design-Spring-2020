@@ -11,6 +11,19 @@ Arduino and LabVIEW files designed to allow monitoring and controlling of temper
 
 ![](Images/singleVi.png)
 
+### How the vi Works:
+
+This vi contains 4 simultaneously executed while loops, each performing a major function of the apparatus.  These 4 main functions are:
+
+- Control of the plenum fan
+- Control of the lights, circulation fans, and valves
+- Sensor readings of airflow into each zone
+- Sensor readings of the CO2, temperature, and humidity in each zone, inlet, outlet, and main return
+
+The while loops are executed while true. To end the run, switch all 4 loops to false.
+
+***
+
 ## The Plenum Fan:
 
 ### Hardware:
@@ -82,11 +95,11 @@ averages 5 terms
 
 ![](Images/co2Read.gif)
 
-LabVIEW checks the buffer for incoming bytes.  The first 2 bytes received determine the indicator it will be shown in.  It displays each reading in a separate indicator.  The data is appended to a plain text file.
+LabVIEW checks the buffer for incoming bytes.  The first 2 bytes received determine the indicator it will be shown in.  It displays each reading in a separate indicator.  The data is timestamped and appended to a plain text file.
 
 ### Example:
 
-If the Arduino sends "t521.3", LabVIEW interprets this as the temperature from sensor 5 (t5).  So 21.3 is displayed in the t5 indicator.
+If the Arduino sends "t521.3" at 5:31 pm, LabVIEW interprets this as the temperature from sensor 5 (t5).  So 21.3 is displayed in the t5 indicator. It appends to the text file "5:31:05 PM - t521.3"
 
 ### How the Arduino Code Works:
 
