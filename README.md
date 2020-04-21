@@ -1,5 +1,4 @@
-# Documentation
-
+# About This Project
 ***
 
 Arduino and LabVIEW files designed to allow monitoring and controlling of temperature, CO2 levels, and airflow in a test bed through use of Arduino and DAQ.
