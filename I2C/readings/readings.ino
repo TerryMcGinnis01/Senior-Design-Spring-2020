@@ -34,7 +34,7 @@ SCD30 airSensor;
 void setup()
 {
         Serial.begin(115200);
-        Serial.println("SCD30 Example");
+        Serial.println("Begin Transmission");
         Wire.begin();
         tcaselect(3);
         if (airSensor.begin() == false)
